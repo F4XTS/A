@@ -254,6 +254,26 @@ async def aes(ctx):
       embed.add_field(name=name, value=key)
     await ctx.send(embed=embed)
 
+@slash.slash(name="newid", description="Get All Cosmetic Names And IDS From Latest Version")
+async def newids(ctx):
+    r = requests.get("https://fortnite-api.com/v2/cosmetics/br/new")
+    data = r.json()
+    embed = discord.Embed(title="New Cosmetic ID'S", color=discord.Color.blue())
+    text = "```md\n"
+    lastSection = data["data"]["items"][0]["type"]["backendValue"]
+    for item in data["data"]["items"]:
+        if lastSection != item["type"]["backendValue"]:
+            text = text + "```"
+            embed.add_field(name=lastSection, value=text, inline=False)
+            lastSection = item["type"]["backendValue"]
+            newname = item["name"]
+            text = f'``` {newid} - {newname}\n'
+        else:
+            newname = item["name"]
+            text = text + " " + f'{newid} - {newname}\n'
+    embed.set_footer(text=footertext)
+    await ctx.send(embed=embed)
+
 
 
 client.run("MTAzNDM0NTgzOTg1NTk0MzY4MA.GMPdh_.ZPBTzDkaQjAXGPUHhxN5Clh6K-GEGz027QKi-o")
